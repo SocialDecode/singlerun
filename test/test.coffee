@@ -13,8 +13,8 @@ describe 'Pid Creation', ->
 	it 'should erase the pid file', (done)->
 		setTimeout ->
 			require('fs').exists __dirname + '/../index.coffee.pid', (exists)->
-					assert.equal false, exists
-					done()
+				assert.equal false, exists
+				done()
 		,1000
 	it 'should create a pid with arguments', (done)->
 		require('child_process').exec __dirname + '/../index.coffee --testargument', (err, stdout, sdterr)->
@@ -30,9 +30,8 @@ describe 'Pid Creation', ->
 				assert.equal false, exists
 				done()
 		,1000
-		
-  describe '#indexOf()', ->
-    it 'should return -1 when the value is not present', ->
-      assert.equal -1, [1,2,3].indexOf(5)
-      assert.equal -1, [1,2,3].indexOf(0)
 
+  describe '#indexOf()', ->
+		it 'should return -1 when the value is not present', ->
+			assert.equal -1, [1,2,3].indexOf(5)
+			assert.equal -1, [1,2,3].indexOf(0)

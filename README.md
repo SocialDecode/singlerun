@@ -49,6 +49,6 @@ Killother is not implemented yet.
 
 
 ## Changelog
-
+- 0.15.0324-c: Created the required index.js and added coffeescript to dependencies
 - 0.15.0324-b: Readme upgraded, some bugfixes
 - 0.15.0324-a: Release to npm

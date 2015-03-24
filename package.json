@@ -1,10 +1,10 @@
 {
   "name": "singlerun",
-  "version": "0.15.0324-a",
+  "version": "0.15.0324-c",
   "description": "Make sure an instance of the current script only runs once.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "coffee test/test.coffee"
   },
   "repository": {
     "type": "git",
@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/xalakox/singlerun/issues"
   },
-  "homepage": "https://github.com/xalakox/singlerun"
+  "homepage": "https://github.com/xalakox/singlerun",
+  "dependencies": {
+    "coffee-script": "1.9.1"
+  }
 }

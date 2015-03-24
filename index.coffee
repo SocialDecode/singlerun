@@ -1,19 +1,20 @@
 #!/usr/bin/env coffee
 
-doPid = ([killother, includeparams]..., callback)->
+doPid = ([killother, includeparams, verbose]..., callback)->
 	killother ?= false
 	includeparams ?= true
+	verbose ?= false
 	# process and stuff (stick to 1 instance per execution)
 	delpid = true
 	fs = require "fs"
 	leargs = ""
 	leargs+=arg for arg,i in process.argv when arg isnt "coffee" and arg isnt "node" and arg isnt __filename if includeparams
 	pidfile = __dirname + "/" + __filename.split('/').pop() + (new Buffer(leargs).toString('base64')) + '.pid'
-	console.log (new Buffer(leargs).toString('base64'))
-	console.log "args : ", leargs
+	console.log('[SingleRun] Hash key: '+(new Buffer(leargs).toString('base64'))) if verbose
+	console.log("[SingleRun] Args: ", leargs) if verbose
 	process.on 'exit', (code) ->
 		if fs.existsSync(pidfile) and delpid
-			console.log 'Removing pid file..'
+			console.log('[SingleRun] Removing pid file..') if verbose
 			fs.unlinkSync pidfile
 			return
 
@@ -28,18 +29,20 @@ doPid = ([killother, includeparams]..., callback)->
 		if fs.existsSync(pidfile)
 			#there is already a process running
 			delpid = false
-			console.log "Pid file exists"
+			console.log "[SingleRun] Pid file exists"
 			data = fs.readFileSync pidfile, "utf8"
 			if data?
 				isrunning data,(isit)->
 					if isit
-						console.log __filename +' IS already running'
+						console.log('[SingleRun] '+__filename+' IS already running') if verbose
 						process.exit 1
 					else
-						console.log '%s Process not found, running it (and removing pid in proces)', data
+						if verbose
+							console.log('[SingleRun] %s Process not found, running it (and removing pid in proces)', data)
 						cback()
 			else
-				console.log "Pid file found but no data in it, erasing pid"
+				if verbose
+					console.log("[SingleRun] Pid file found but no data in it, erasing pid")
 				cback()
 		else
 			cback()
@@ -49,17 +52,15 @@ doPid = ([killother, includeparams]..., callback)->
 			# just in case
 			fs.writeFile pidfile, process.pid, { encoding: 'utf8' }, (err) ->
 				throw err if err
-				console.log 'created ', pidfile
+				console.log('[SingleRun] created ', pidfile) if verbose
 				callback()
-
-
 
 if !module.parent
 	doPid false,true,->
-		console.log "running"
+		console.log("[SingleRun] Running") if verbose
 		setTimeout ->
-			console.log "not anymore"
+			console.log("[SingleRun] Not anymore") if verbose
 			process.exit 0
 		,1000
 else
-    exports = doPid
+	module.exports = doPid
